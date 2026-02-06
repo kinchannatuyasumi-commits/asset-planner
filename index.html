@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>資産形成シミュレーションツール - FP向け</title>
+    <title>資産形成シミュレーションツール</title>
     <style>
         
         }
@@ -605,16 +605,23 @@
                 
                 if (year < years) {
                     for (let month = 0; month < 12; month++) {
-                        // 常に運用益を計算（運用は継続）
-                        currentTotal = currentTotal * (1 + monthlyRate);
+                        // 🔄 野村證券方式：先に運用 → 後で積立/取り崩し（月末）
                         
                         // 取り崩し開始前：積立あり
                         if (!withdrawalAge || age < withdrawalAge) {
+                            // ステップ1: 月初の運用益を計算
+                            currentTotal = currentTotal * (1 + monthlyRate);
+                            
+                            // ステップ2: 月末に積立
                             currentTotal += monthlyInvestment;
                             totalInvestment += monthlyInvestment; // ✅ 元本を増やす
                         }
                         // 取り崩し開始後：積立なし、取り崩しのみ
                         else {
+                            // ステップ1: 月初の運用益を計算
+                            currentTotal = currentTotal * (1 + monthlyRate);
+                            
+                            // ステップ2: 月末に取り崩し
                             currentTotal -= monthlyWithdrawal;
                             // ✅ 元本は変更しない（取り崩しても元本の記録は減らない）
                         }
@@ -1136,4 +1143,4 @@
     </style>
 </body>
 </html>
-                                 
+                                 
